@@ -76,20 +76,6 @@ public class HelloController extends Application {
 
                 HostServices hostServices = getHostServices();
 
-                //Open in google maps feature
-                String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" + city_name;
-                googleMaps.setText("Open " + city_name + " in Google Maps");
-                googleMaps.setOnMouseClicked(event -> hostServices.showDocument(googleMapsUrl));
-
-                //Open in Google
-                String googleUrl = "https://www.google.com/search?q=" + city_name;
-                google.setText("Search " + city_name + " in Google");
-                google.setOnMouseClicked(event -> hostServices.showDocument(googleUrl));
-
-                //Open in wikipedia
-                String wikipediaUrl = "https://en.wikipedia.org/wiki/" + city_name;
-                wikipedia.setText("Search " + city_name + " in Wikipedia");
-                wikipedia.setOnMouseClicked(event -> hostServices.showDocument(wikipediaUrl));
 
             }
         }
