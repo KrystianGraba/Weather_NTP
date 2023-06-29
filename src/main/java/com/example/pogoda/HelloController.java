@@ -2,7 +2,6 @@ package com.example.pogoda;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.sql.*;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
@@ -22,6 +21,8 @@ import javafx.stage.Stage;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -35,13 +36,15 @@ public class HelloController extends Application {
     public Label meow_fact;
     @FXML
     private Label welcomeText;
+
     @FXML
-    public void initialize()  throws IOException  {
+    public void initialize() throws IOException {
         meow_fact.maxWidth(200);
         meow_fact.prefWidth(100);
         meow_fact.setWrapText(true);
         meow_fact.setText(getMeow());
-        meow_fact.setMinHeight(Region.USE_PREF_SIZE);    }
+        meow_fact.setMinHeight(Region.USE_PREF_SIZE);
+    }
 
     public void onShowWeatherButton() throws IOException {
         if (!(cityNameTextField != null && cityNameTextField.getText() != null && cityNameTextField.getText().length() > 0)) {
@@ -49,7 +52,7 @@ public class HelloController extends Application {
         } else {
             welcomeText.setText("Showing forecast for " + cityNameTextField.getText());
             String url_s = "https://api.weatherapi.com/v1/current.json?key=6e7f3ab892f14124a9b200410232806&q=" + cityNameTextField.getText() + "&aqi=no&lang=pl";
-            String newur_sl=url_s.replaceAll(" ","%20");
+            String newur_sl = url_s.replaceAll(" ", "%20");
 
             URL url = new URL(newur_sl);
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -123,11 +126,10 @@ public class HelloController extends Application {
         con.setRequestProperty("Content-Type", "application/json; utf-8");
 
         int status = con.getResponseCode();
-        if (status!=200) {
+        if (status != 200) {
             System.out.println("Error");
             return "I can't get the meow facts right now";
-        }
-        else {
+        } else {
             Scanner sc = new Scanner(url.openStream());
             StringBuilder inline = new StringBuilder();
             while (sc.hasNext()) {
@@ -161,7 +163,7 @@ public class HelloController extends Application {
             cityNameTextField.setText(line);
             welcomeText.setText("Location loaded");
 
-        }else {
+        } else {
             welcomeText.setText("There is no location saved");
         }
     }
@@ -170,7 +172,7 @@ public class HelloController extends Application {
         PrintWriter writer = new PrintWriter("location.txt");
         writer.close();
         //get a location from the textfield and save it to the file on the disk
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream("location.txt", true), "UTF-8");
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream("location.txt", true), StandardCharsets.UTF_8);
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
         bufferedWriter.write("");
         bufferedWriter.flush();
@@ -240,7 +242,7 @@ public class HelloController extends Application {
 //        Port number: 3306
         //Table: weatherhistory_warsaw
 
-        ArrayList <ObjectWeatherHistory> list_db = new ArrayList<>();
+        ArrayList<ObjectWeatherHistory> list_db = new ArrayList<>();
         Class.forName("com.mysql.cj.jdbc.Driver");
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://sql7.freesqldatabase.com:3306/sql7629360", "sql7629360", "KKKTblqyIl");
@@ -255,16 +257,12 @@ public class HelloController extends Application {
         }
 
 
-
-
-
-
         //sample data
         ArrayList<ObjectWeatherHistory> list = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 24; i++) {
 
-            list.add(new ObjectWeatherHistory(random.nextDouble(20),20.0,1000.0+i,10.0, i));
+            list.add(new ObjectWeatherHistory(random.nextDouble(20), 20.0, 1000.0 + i, 10.0, i));
         }
         //create the chart
         NumberAxis xAxis = new NumberAxis();
@@ -290,9 +288,5 @@ public class HelloController extends Application {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-
-
-
-
     }
 }

@@ -1,4 +1,5 @@
 package com.example.pogoda;
+// This is a class that is used to store weather history entries
 
 public class ObjectWeatherHistory
 {
@@ -6,7 +7,6 @@ public class ObjectWeatherHistory
     Double windSpeed;
     Double pressure;
     Double humidity;
-    // time in epoch
     Integer hour;
 
     public Double getTemperture() {
