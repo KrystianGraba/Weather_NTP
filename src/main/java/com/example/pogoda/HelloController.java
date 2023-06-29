@@ -132,6 +132,7 @@ public class HelloController extends Application {
                     google.setText("Search " + cityNameTextField.getText() + " in Google");
                     wikipedia.setOnMouseClicked(event -> hostServices.showDocument("https://en.wikipedia.org/wiki/" + cityNameTextField.getText()));
                     wikipedia.setText("Open " + cityNameTextField.getText() + " in Wikipedia");
+
                     googleMaps.setVisible(true);
                     google.setVisible(true);
                     wikipedia.setVisible(true);
