@@ -124,7 +124,7 @@ public class HelloController extends Application {
 
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             welcomeText.setText("Error: Network error: " + e.getMessage());
         }
     }
@@ -273,7 +273,6 @@ public class HelloController extends Application {
             throwables.printStackTrace();
             welcomeText.setText("DB connection error");
         }
-
 
 
         //sample data

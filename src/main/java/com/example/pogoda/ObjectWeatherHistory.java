@@ -1,13 +1,26 @@
 package com.example.pogoda;
 // This is a class that is used to store weather history entries
 
-public class ObjectWeatherHistory
-{
+public class ObjectWeatherHistory {
     Double temperture;
     Double windSpeed;
     Double pressure;
     Double humidity;
     Integer hour;
+
+    public ObjectWeatherHistory(Double temperture, Double windSpeed, Double pressure, Double humidity, Integer hour) {
+        this.temperture = temperture;
+        this.windSpeed = windSpeed;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.hour = hour;
+    }
+
+    public ObjectWeatherHistory(Double temperture, Integer hour) {
+        this.temperture = temperture;
+        this.hour = hour;
+
+    }
 
     public Double getTemperture() {
         return temperture;
@@ -47,19 +60,6 @@ public class ObjectWeatherHistory
 
     public void setHour(Integer hour) {
         this.hour = hour;
-    }
-
-    public ObjectWeatherHistory(Double temperture, Double windSpeed, Double pressure, Double humidity, Integer hour) {
-        this.temperture = temperture;
-        this.windSpeed = windSpeed;
-        this.pressure = pressure;
-        this.humidity = humidity;
-        this.hour = hour;
-    }
-    public ObjectWeatherHistory(Double temperture, Integer hour) {
-        this.temperture = temperture;
-        this.hour = hour;
-
     }
 
 }

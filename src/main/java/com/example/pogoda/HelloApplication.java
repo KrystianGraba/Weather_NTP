@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -21,9 +25,5 @@ public class HelloApplication extends Application {
         scene.setFill(new RadialGradient(0, 0, 0.5, 0.5, 1, true, null, new Stop(0, Color.web("#ff99ff")), new Stop(1, Color.web("#32ff12"))));
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
