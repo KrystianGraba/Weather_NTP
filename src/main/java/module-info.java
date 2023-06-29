@@ -4,6 +4,8 @@ module com.example.pogoda {
     requires com.google.gson;
 
     requires com.dlsc.formsfx;
+    requires mysql.connector.java;
+    requires java.sql;
 
     opens com.example.pogoda to javafx.fxml;
     exports com.example.pogoda;
