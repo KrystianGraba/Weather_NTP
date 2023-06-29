@@ -299,8 +299,8 @@ public class HelloController extends Application {
 //        for (int i = 0; i < list.size(); i++) {
 //            series.getData().add(new XYChart.Data(list.get(i).getHour(), list.get(i).getTemperture()));
 //        }
-        for (int i = 0; i < list_db.size(); i++) {
-            series.getData().add(new XYChart.Data(list_db.get(i).getHour(), list_db.get(i).getTemperture()));
+        for (ObjectWeatherHistory objectWeatherHistory : list_db) {
+            series.getData().add(new XYChart.Data<>(objectWeatherHistory.getHour(), objectWeatherHistory.getTemperture()));
         }
         Scene scene = new Scene(lineChart, 800, 600);
         lineChart.getData().add(series);
