@@ -42,103 +42,120 @@ public class HelloController extends Application {
         meow_fact.maxWidth(200);
         meow_fact.prefWidth(100);
         meow_fact.setWrapText(true);
-        meow_fact.setText(getMeow());
+        try {
+            meow_fact.setText(getMeow());
+        } catch (IOException e) {
+            meow_fact.setText("Error: " + e.getMessage());
+        }
         meow_fact.setMinHeight(Region.USE_PREF_SIZE);
     }
 
     public void onShowWeatherButton() throws IOException {
-        if (!(cityNameTextField != null && cityNameTextField.getText() != null && cityNameTextField.getText().length() > 0)) {
-            welcomeText.setText("Please enter a city name");
-        } else {
-            welcomeText.setText("Showing forecast for " + cityNameTextField.getText());
-            String url_s = "https://api.weatherapi.com/v1/current.json?key=6e7f3ab892f14124a9b200410232806&q=" + cityNameTextField.getText() + "&aqi=no&lang=pl";
-            String newur_sl = url_s.replaceAll(" ", "%20");
+        try {
 
-            URL url = new URL(newur_sl);
+            if (!(cityNameTextField != null && cityNameTextField.getText() != null && cityNameTextField.getText().length() > 0)) {
+                welcomeText.setText("Please enter a city name");
+            } else {
+                welcomeText.setText("Showing forecast for " + cityNameTextField.getText());
+                String url_s = "https://api.weatherapi.com/v1/current.json?key=6e7f3ab892f14124a9b200410232806&q=" + cityNameTextField.getText() + "&aqi=no&lang=pl";
+                String newur_sl = url_s.replaceAll(" ", "%20");
+
+                URL url = new URL(newur_sl);
+                HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Content-Type", "application/json; utf-8");
+
+                int status = con.getResponseCode();
+
+                if (!(status == 200)) {
+                    welcomeText.setText("Error: " + status);
+                    System.out.println("Error: " + status + "\n" + con.getResponseMessage());
+                } else {
+                    StringBuilder inLine = new StringBuilder();
+                    Scanner scanner = new Scanner(url.openStream());
+
+                    while (scanner.hasNext()) {
+                        inLine.append(scanner.nextLine());
+                    }
+                    System.out.println(inLine);
+
+
+                    JsonObject convertObj = new Gson().fromJson(inLine.toString(), JsonObject.class);
+
+                    String city_name = convertObj.get("location").getAsJsonObject().get("name").getAsString();
+                    welcomeText.setText("Weather in: " + city_name +
+                            ":\nTemperature: " + convertObj.get("current").getAsJsonObject().get("temp_c").getAsString() +
+                            "C\nWind: " + convertObj.get("current").getAsJsonObject().get("wind_kph").getAsString() +
+                            "kph\nPressure: " + convertObj.get("current").getAsJsonObject().get("pressure_mb").getAsString() +
+                            "mb\nPrecipitation: " + convertObj.get("current").getAsJsonObject().get("precip_mm").getAsString() +
+                            "mm\nHumidity: " + convertObj.get("current").getAsJsonObject().get("humidity").getAsString() +
+                            "%\nCondition: " + convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("text").getAsString());
+                    if (convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("text").getAsString().equals("Sunny")) {
+                        welcomeText.setTextFill(javafx.scene.paint.Color.web("#ff0000"));
+                    } else {
+                        welcomeText.setTextFill(javafx.scene.paint.Color.web("#000000"));
+                    }
+                    if (convertObj.get("current").getAsJsonObject().get("temp_c").getAsInt() < 0) {
+                        welcomeText.setTextFill(javafx.scene.paint.Color.web("#0000ff"));
+                    }
+                    //if error
+                    if (convertObj.get("error") != null) {
+                        welcomeText.setText("Error: " + convertObj.get("error").getAsJsonObject().get("message").getAsString());
+                    }
+
+                    welcomeText.setStyle("-fx-font-size: 14px;");
+                    welcomeText.setMinHeight(Region.USE_PREF_SIZE);
+
+                    welcomeText.setWrapText(true);
+                    Image image = new Image("https:" + convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("icon").getAsString());
+                    weatherIcon.setImage(image);
+
+
+                    HostServices hostServices = getHostServices();
+                    googleMaps.setOnMouseClicked(event -> hostServices.showDocument("https://www.google.com/maps/place/" + cityNameTextField.getText()));
+                    googleMaps.setText("Open " + cityNameTextField.getText() + " in Google Maps");
+                    google.setOnMouseClicked(event -> hostServices.showDocument("https://www.google.com/search?q=" + cityNameTextField.getText()));
+                    google.setText("Search " + cityNameTextField.getText() + " in Google");
+                    wikipedia.setOnMouseClicked(event -> hostServices.showDocument("https://en.wikipedia.org/wiki/" + cityNameTextField.getText()));
+                    wikipedia.setText("Open " + cityNameTextField.getText() + " in Wikipedia");
+                    googleMaps.setVisible(true);
+                    google.setVisible(true);
+                    wikipedia.setVisible(true);
+
+                }
+            }
+        }catch (Exception e){
+            welcomeText.setText("Error: Network error: " + e.getMessage());
+        }
+    }
+
+
+    public String getMeow() throws IOException {
+        try {
+
+            URL url = new URL("https://meowfacts.herokuapp.com/");
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("Content-Type", "application/json; utf-8");
 
             int status = con.getResponseCode();
-
-            if (!(status == 200)) {
-                welcomeText.setText("Error: " + status);
-                System.out.println("Error: " + status + "\n" + con.getResponseMessage());
+            if (status != 200) {
+                System.out.println("Error");
+                return "I can't get the meow facts right now";
             } else {
-                StringBuilder inLine = new StringBuilder();
-                Scanner scanner = new Scanner(url.openStream());
-
-                while (scanner.hasNext()) {
-                    inLine.append(scanner.nextLine());
+                Scanner sc = new Scanner(url.openStream());
+                StringBuilder inline = new StringBuilder();
+                while (sc.hasNext()) {
+                    inline.append(sc.nextLine());
                 }
-                System.out.println(inLine);
+                sc.close();
 
-
-                JsonObject convertObj = new Gson().fromJson(inLine.toString(), JsonObject.class);
-
-                String city_name = convertObj.get("location").getAsJsonObject().get("name").getAsString();
-                welcomeText.setText("Weather in: " + city_name +
-                        ":\nTemperature: " + convertObj.get("current").getAsJsonObject().get("temp_c").getAsString() +
-                        "C\nWind: " + convertObj.get("current").getAsJsonObject().get("wind_kph").getAsString() +
-                        "kph\nPressure: " + convertObj.get("current").getAsJsonObject().get("pressure_mb").getAsString() +
-                        "mb\nPrecipitation: " + convertObj.get("current").getAsJsonObject().get("precip_mm").getAsString() +
-                        "mm\nHumidity: " + convertObj.get("current").getAsJsonObject().get("humidity").getAsString() +
-                        "%\nCondition: " + convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("text").getAsString());
-                if (convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("text").getAsString().equals("Sunny")) {
-                    welcomeText.setTextFill(javafx.scene.paint.Color.web("#ff0000"));
-                } else {
-                    welcomeText.setTextFill(javafx.scene.paint.Color.web("#000000"));
-                }
-                if (convertObj.get("current").getAsJsonObject().get("temp_c").getAsInt() < 0) {
-                    welcomeText.setTextFill(javafx.scene.paint.Color.web("#0000ff"));
-                }
-                //if error
-                if (convertObj.get("error") != null) {
-                    welcomeText.setText("Error: " + convertObj.get("error").getAsJsonObject().get("message").getAsString());
-                }
-
-                welcomeText.setStyle("-fx-font-size: 14px;");
-                welcomeText.setMinHeight(Region.USE_PREF_SIZE);
-
-                welcomeText.setWrapText(true);
-                Image image = new Image("https:" + convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("icon").getAsString());
-                weatherIcon.setImage(image);
-
-
-                HostServices hostServices = getHostServices();
-                googleMaps.setOnMouseClicked(event -> hostServices.showDocument("https://www.google.com/maps/place/" + cityNameTextField.getText()));
-                googleMaps.setText("Open " + cityNameTextField.getText() + " in Google Maps");
-                google.setOnMouseClicked(event -> hostServices.showDocument("https://www.google.com/search?q=" + cityNameTextField.getText()));
-                google.setText("Search " + cityNameTextField.getText() + " in Google");
-                wikipedia.setOnMouseClicked(event -> hostServices.showDocument("https://en.wikipedia.org/wiki/" + cityNameTextField.getText()));
-                wikipedia.setText("Open " + cityNameTextField.getText() + " in Wikipedia");
-                googleMaps.setVisible(true);
-                google.setVisible(true);
-                wikipedia.setVisible(true);
+                JsonObject jsonObject = new Gson().fromJson(inline.toString(), JsonObject.class);
+                return jsonObject.get("data").getAsString();
             }
-        }
-    }
-
-    public String getMeow() throws IOException {
-        URL url = new URL("https://meowfacts.herokuapp.com/");
-        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-
-        int status = con.getResponseCode();
-        if (status != 200) {
-            System.out.println("Error");
+        } catch (Exception e) {
+            e.printStackTrace();
             return "I can't get the meow facts right now";
-        } else {
-            Scanner sc = new Scanner(url.openStream());
-            StringBuilder inline = new StringBuilder();
-            while (sc.hasNext()) {
-                inline.append(sc.nextLine());
-            }
-            sc.close();
-
-            JsonObject jsonObject = new Gson().fromJson(inline.toString(), JsonObject.class);
-            return jsonObject.get("data").getAsString();
         }
 
     }
@@ -254,7 +271,9 @@ public class HelloController extends Application {
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            welcomeText.setText("DB connection error");
         }
+
 
 
         //sample data
