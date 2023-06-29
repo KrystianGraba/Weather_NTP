@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.example.pogoda","l":"HelloApplication"},{"p":"com.example.pogoda","l":"HelloController"},{"p":"com.example.pogoda","l":"ObjectWeatherHistory"}];updateSearchResults();
