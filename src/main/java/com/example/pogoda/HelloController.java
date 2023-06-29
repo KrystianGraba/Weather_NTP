@@ -231,7 +231,7 @@ public class HelloController extends Application {
 
                 int status2 = con2.getResponseCode();
                 if (status2 != 200) {
-                    System.out.println("Error");
+                    System.out.println("Error ");
                 } else {
                     Scanner sc2 = new Scanner(url2.openStream());
                     StringBuilder inline2 = new StringBuilder();
