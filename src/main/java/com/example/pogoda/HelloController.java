@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+
 @SuppressWarnings({"ALL", "MismatchedQueryAndUpdateOfCollection"})
 public class HelloController extends Application {
     public TextField cityNameTextField;
@@ -80,6 +83,20 @@ public class HelloController extends Application {
                     JsonObject convertObj = new Gson().fromJson(inLine.toString(), JsonObject.class);
 
                     String city_name = convertObj.get("location").getAsJsonObject().get("name").getAsString();
+
+                    double temp = convertObj.get("current").getAsJsonObject().get("temp_c").getAsDouble();
+                    assertThat(temp).isBetween(-100.0, 100.0);
+                    double wind = convertObj.get("current").getAsJsonObject().get("wind_kph").getAsDouble();
+                    assertThat(wind).isBetween(0.0, 500.0);
+                    double pressure = convertObj.get("current").getAsJsonObject().get("pressure_mb").getAsDouble();
+                    assertThat(pressure).isBetween(0.0, 2000.0);
+                    double precipitation = convertObj.get("current").getAsJsonObject().get("precip_mm").getAsDouble();
+                    assertThat(precipitation).isBetween(0.0, 30000.0);
+                    double humidity = convertObj.get("current").getAsJsonObject().get("humidity").getAsDouble();
+                    assertThat(humidity).isBetween(0.0, 100.0);
+                    String condition = convertObj.get("current").getAsJsonObject().get("condition").getAsJsonObject().get("text").getAsString();
+                    assertThat(condition).isNotNull();
+
                     welcomeText.setText("Weather in: " + city_name +
                             ":\nTemperature: " + convertObj.get("current").getAsJsonObject().get("temp_c").getAsString() +
                             "C\nWind: " + convertObj.get("current").getAsJsonObject().get("wind_kph").getAsString() +

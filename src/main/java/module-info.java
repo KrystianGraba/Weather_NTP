@@ -4,6 +4,7 @@ module com.example.pogoda {
     requires com.google.gson;
 
     requires java.sql;
+    requires org.assertj.core;
 
     opens com.example.pogoda to javafx.fxml;
     exports com.example.pogoda;
