@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+@SuppressWarnings({"ALL", "MismatchedQueryAndUpdateOfCollection"})
 public class HelloController extends Application {
     public TextField cityNameTextField;
     public ImageView weatherIcon;
@@ -38,19 +39,15 @@ public class HelloController extends Application {
     private Label welcomeText;
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         meow_fact.maxWidth(200);
         meow_fact.prefWidth(100);
         meow_fact.setWrapText(true);
-        try {
-            meow_fact.setText(getMeow());
-        } catch (IOException e) {
-            meow_fact.setText("Error: " + e.getMessage());
-        }
+        meow_fact.setText(getMeow());
         meow_fact.setMinHeight(Region.USE_PREF_SIZE);
     }
 
-    public void onShowWeatherButton() throws IOException {
+    public void onShowWeatherButton() {
         try {
 
             if (!(cityNameTextField != null && cityNameTextField.getText() != null && cityNameTextField.getText().length() > 0)) {
@@ -130,7 +127,7 @@ public class HelloController extends Application {
     }
 
 
-    public String getMeow() throws IOException {
+    public String getMeow() {
         try {
 
             URL url = new URL("https://meowfacts.herokuapp.com/");
@@ -172,7 +169,7 @@ public class HelloController extends Application {
         cityNameTextField.setText(selectedItem.getText());
     }
 
-    public void loadlocation(ActionEvent actionEvent) throws IOException {
+    public void loadlocation(ActionEvent ignoredActionEvent) throws IOException {
         FileReader fileReader = new FileReader("location.txt");
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line = bufferedReader.readLine();
@@ -185,7 +182,7 @@ public class HelloController extends Application {
         }
     }
 
-    public void savelocation(ActionEvent actionEvent) throws IOException {
+    public void savelocation(ActionEvent ignoredActionEvent) throws IOException {
         PrintWriter writer = new PrintWriter("location.txt");
         writer.close();
         //get a location from the textfield and save it to the file on the disk
@@ -203,7 +200,7 @@ public class HelloController extends Application {
 
     }
 
-    public void getbyIP(ActionEvent actionEvent) {
+    public void getbyIP(ActionEvent ignoredActionEvent) {
         //get the location by IP
         //I use ipinfo.io to get the IP address
         try {
@@ -249,7 +246,8 @@ public class HelloController extends Application {
         }
     }
 
-    public void statistic(ActionEvent actionEvent) throws ClassNotFoundException {
+    @SuppressWarnings({"CommentedOutCode", "unchecked"})
+    public void statistic(ActionEvent ignoredActionEvent) throws ClassNotFoundException {
         //mysql database
         //column 1 - ID(int), column 2 - hour(int), column 3 - temperature(double). I want to add it to the arraylist of ObjectWeatherHistory
 //        Host: sql7.freesqldatabase.com

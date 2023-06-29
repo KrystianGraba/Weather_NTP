@@ -6,13 +6,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<!--suppress ALL -->
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="20.0" style="-fx-background-color: #FEC8D8"
       xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.example.pogoda.HelloController">
     <padding>
-        <Insets bottom="0.0" left="20.0" right="20.0" top="5.0"/>
+        <Insets left="20.0" right="20.0" top="5.0"/>
     </padding>
 
-    <Label fx:id="meow_fact" text="" wrapText="true"/>
+    <Label fx:id="meow_fact" wrapText="true"/>
     <ImageView fx:id="weatherIcon" fitHeight="40.0" fitWidth="40.0"/>
     <Label fx:id="welcomeText"/>
 
@@ -22,11 +23,9 @@
     <Button onAction="#onShowWeatherButton" text="Show weather!"/>
 
     <HBox prefHeight="30.0" prefWidth="400.0" alignment="CENTER">
-        <children>
-            <Button onAction="#loadlocation" text="Load Location"/>
-            <Button onAction="#savelocation" text="Save location"/>
-            <Button onAction="#getbyIP" text="Get location"/>
-        </children>
+        <Button onAction="#loadlocation" text="Load Location"/>
+        <Button onAction="#savelocation" text="Save location"/>
+        <Button onAction="#getbyIP" text="Get location"/>
     </HBox>
     <Label text="Pick a city from the list"/>
     <ListView minHeight="100" prefHeight="200.0" prefWidth="200.0">
@@ -46,9 +45,9 @@
             </FXCollections>
         </items>
     </ListView>
-    <Label fx:id="googleMaps" text=""/>
-    <Label fx:id="google" text=""/>
-    <Label fx:id="wikipedia" text=""/>
+    <Label fx:id="googleMaps"/>
+    <Label fx:id="google"/>
+    <Label fx:id="wikipedia"/>
 
     <Button fx:id="statistic" onAction="#statistic" text="Temperature graph"/>
 </VBox>
